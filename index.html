@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shortn — URL Shortener &amp; QR Generator</title>
+<meta name="description" content="Turn long, ugly URLs into short, professional links with an instant scannable QR code.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="grain"></div>
+
+  <main class="page">
+
+    <header class="page-head">
+      <div class="brand">
+        <span class="brand-mark">⟁</span>
+        <span class="brand-name">Shortn</span>
+      </div>
+      <p class="brand-tag">Long links, printed short.</p>
+    </header>
+
+    <!-- THE TICKET -->
+    <section class="ticket" id="ticket">
+
+      <div class="ticket-top">
+        <div class="ticket-row ticket-row--head">
+          <span class="ticket-label">No. <span id="ticket-number">0001</span></span>
+          <span class="ticket-label ticket-label--right" id="ticket-clock">--:--:--</span>
+        </div>
+
+        <h1 class="ticket-title">Shorten a URL</h1>
+        <p class="ticket-sub">Paste the long one. Get a short one, and a code to scan it.</p>
+
+        <form class="ticket-form" id="shorten-form">
+          <label class="field-label" for="long-url">Original URL</label>
+          <div class="input-row">
+            <input
+              type="url"
+              id="long-url"
+              name="long-url"
+              placeholder="https://example.com/a/very/long/path?with=lots&of=parameters"
+              autocomplete="off"
+              spellcheck="false"
+              required
+            >
+            <button type="submit" class="btn-print" id="submit-btn">
+              <span class="btn-print-text">Print Ticket</span>
+              <span class="btn-print-spinner" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p class="field-error" id="field-error" role="alert"></p>
+        </form>
+      </div>
+
+      <div class="perforation" aria-hidden="true"></div>
+
+      <!-- RESULT STUB (hidden until a link is generated) -->
+      <div class="ticket-bottom" id="result-stub" hidden>
+
+        <div class="stub-row">
+          <span class="stub-label">Shortened Link</span>
+        </div>
+
+        <div class="short-url-row">
+          <code class="short-url" id="short-url-text">tinyurl.com/xxxxxxx</code>
+          <button class="btn-copy" id="copy-btn" type="button" aria-label="Copy shortened link">
+            <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="11" height="11" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span class="btn-copy-text">Copy</span>
+          </button>
+        </div>
+
+        <div class="stub-divider" aria-hidden="true"></div>
+
+        <div class="qr-block">
+          <div class="qr-frame">
+            <div id="qrcode" class="qr-canvas"></div>
+            <div class="qr-corner qr-corner--tl"></div>
+            <div class="qr-corner qr-corner--tr"></div>
+            <div class="qr-corner qr-corner--bl"></div>
+            <div class="qr-corner qr-corner--br"></div>
+          </div>
+          <div class="qr-meta">
+            <span class="stub-label">Scan to open</span>
+            <p class="qr-hint">Print this on slides, business cards, or signage. Any phone camera reads it.</p>
+            <a class="qr-download" id="qr-download" download="shortn-qr.png">Download QR (.png)</a>
+          </div>
+        </div>
+
+        <div class="stub-footer">
+          <span class="stub-footer-item">Source: <span id="source-name">—</span></span>
+          <button class="btn-new" id="new-link-btn" type="button">+ New link</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- HOW IT WORKS / TRANSPARENCY NOTE -->
+    <section class="notes">
+      <details class="note-card">
+        <summary>How the shortening actually works</summary>
+        <p>
+          This tool talks to TinyURL's public create endpoint to generate a real short link, with a
+          same-device fallback if that request is ever blocked by the browser. Services like Bitly require
+          a server-side API key and can't be called securely from a page like this one without a backend —
+          so this build is structured to swap in a Bitly-backed endpoint later with one function changed
+          in <code>app.js</code>, without touching the UI.
+        </p>
+      </details>
+    </section>
+
+    <footer class="page-foot">
+      <p>Built with HTML, CSS &amp; vanilla JS · QR rendering by QRCode.js</p>
+    </footer>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
